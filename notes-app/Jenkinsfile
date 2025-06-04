@@ -1,11 +1,6 @@
 pipeline {
     
-    agent { 
-        node{
-            label "dev"
-            
-        }
-    }
+
     environment {
        DOCKER_IMAGE = "kushagrag99/notes-app:v1.${BUILD_NUMBER}" 
        REGISTRY_CREDENTIALS = credentials('docker-cred')
