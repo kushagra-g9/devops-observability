@@ -1,5 +1,5 @@
 pipeline {
-    
+    agent any 
 
     environment {
        DOCKER_IMAGE = "kushagrag99/notes-app:v1.${BUILD_NUMBER}" 
