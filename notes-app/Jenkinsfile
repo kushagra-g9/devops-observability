@@ -1,0 +1,43 @@
+pipeline {
+    
+    agent { 
+        node{
+            label "dev"
+            
+        }
+    }
+    environment {
+       DOCKER_IMAGE = "kushagrag99/notes-app:v1.${BUILD_NUMBER}" 
+       REGISTRY_CREDENTIALS = credentials('docker-cred')
+    }
+    
+    stages{
+        stage("Clone Code"){
+            steps{
+                git url: "https://github.com/kushagra-g9/devops-observability.git", branch: "main"
+                
+            }
+        }
+        stage("Build & Test"){
+            steps{
+                sh "docker build . -t ${ DOCKER_IMAG}"
+            }
+        }
+        stage("Push to DockerHub"){
+            steps{
+               withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker'){   
+                       sh "docker tag  ${DOCKER_IMAGE}"
+                       sh "docker push ${DOCKER_IMAGE}"
+               }     
+            }
+        }
+        
+        stage("Deploy"){
+            steps{
+                sh "docker compose up -d"
+            }
+        }
+    }
+}
+
+
